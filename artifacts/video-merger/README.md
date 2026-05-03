@@ -284,16 +284,19 @@ The API works in **3 steps**:
 |-------|------|---------|-------------|
 | `zoom` | `float` | `1.0` | Zoom level applied to all clips (1.0–3.0). See table below |
 
-#### Zoom Value Guide
+#### Zoom Value Guide (CapCut-style)
 
-| `zoom` value | Scale applied | Visible effect |
-|-------------|--------------|----------------|
-| `1.0` | 1.0x (no zoom) | Original size, no change |
-| `1.1` | 1.1x — 10% bigger | Subtle zoom in, edges slightly cropped |
-| `1.2` | 1.2x — 20% bigger | Clearly zoomed in |
-| `1.3` | 1.3x — 30% bigger | Noticeably zoomed in |
-| `1.5` | 1.5x — 50% bigger | Strongly zoomed in |
-| `2.0` | 2.0x — 2× scale | Very tight zoom, half of frame cropped |
+Works exactly like CapCut zoom — base is `100`, each `0.1` step = 1% bigger:
+
+| API `zoom` | CapCut equivalent | Actual scale | Visible effect |
+|-----------|------------------|-------------|----------------|
+| `1.0` | 100 | 1.00x | No zoom, original size |
+| `1.1` | 101 | 1.01x | Very subtle, 1% bigger |
+| `1.2` | 102 | 1.02x | Slightly zoomed |
+| `1.3` | 103 | 1.03x | Noticeable subtle zoom |
+| `1.5` | 105 | 1.05x | 5% zoom in |
+| `2.0` | 110 | 1.10x | 10% zoom in |
+| `3.0` | 120 | 1.20x | 20% zoom in |
 
 > Zoom scales up all clips then center-crops back to the target resolution. No animation — same zoom level from start to end of every clip.
 
