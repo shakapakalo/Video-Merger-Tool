@@ -148,8 +148,11 @@ class MergeRequest(BaseModel):
     @field_validator("output_resolution")
     @classmethod
     def validate_resolution(cls, v: Optional[str]) -> Optional[str]:
-        if v and v not in {"480p", "720p", "1080p"}:
-            raise ValueError("output_resolution must be '480p', '720p', or '1080p'")
+        if v and v not in {"480p", "720p", "1080p", "1440p", "2k", "4k", "uhd", "2160p"}:
+            raise ValueError(
+                "output_resolution must be one of: "
+                "'480p', '720p', '1080p', '1440p', '2k', '4k', 'uhd', '2160p'"
+            )
         return v
 
     @field_validator("orientation")
@@ -349,16 +352,36 @@ def _resolution_dims(resolution: str, orientation: str) -> str:
     Returns FFmpeg scale WxH string.
     Portrait (9:16): phone/vertical format
     Landscape (16:9): standard widescreen
+
+    Supported resolutions:
+      480p   — SD        portrait 480×854      landscape  854×480
+      720p   — HD        portrait 720×1280     landscape 1280×720
+      1080p  — Full HD   portrait 1080×1920    landscape 1920×1080
+      1440p  — 2K/QHD    portrait 1440×2560    landscape 2560×1440
+      2k     — alias for 1440p
+      4k     — Ultra HD  portrait 2160×3840    landscape 3840×2160
+      uhd    — alias for 4k
+      2160p  — alias for 4k
     """
     portrait_map = {
-        "480p": "480:854",
-        "720p": "720:1280",
+        "480p":  "480:854",
+        "720p":  "720:1280",
         "1080p": "1080:1920",
+        "1440p": "1440:2560",
+        "2k":    "1440:2560",
+        "4k":    "2160:3840",
+        "uhd":   "2160:3840",
+        "2160p": "2160:3840",
     }
     landscape_map = {
-        "480p": "854:480",
-        "720p": "1280:720",
+        "480p":  "854:480",
+        "720p":  "1280:720",
         "1080p": "1920:1080",
+        "1440p": "2560:1440",
+        "2k":    "2560:1440",
+        "4k":    "3840:2160",
+        "uhd":   "3840:2160",
+        "2160p": "3840:2160",
     }
     if orientation == "landscape":
         return landscape_map.get(resolution, "1280:720")
