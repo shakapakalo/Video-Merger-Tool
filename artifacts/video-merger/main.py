@@ -462,6 +462,10 @@ def _normalize_clip(
     fade_out_start = max(0.0, clip_dur - fade_d) if clip_dur > fade_d * 2 else 0.0
 
     # ── Build video filter chain ──────────────────────────────────────
+    # Parse target W x H (e.g. "720:1280" → 720, 1280)
+    _dims = scale.split(":")
+    target_w, target_h = int(_dims[0]), int(_dims[1])
+
     scale_vf = (
         f"scale={scale}:force_original_aspect_ratio=decrease,"
         f"pad={scale}:(ow-iw)/2:(oh-ih)/2,"
@@ -472,6 +476,17 @@ def _normalize_clip(
     extra_vf = _build_extra_vf(req)
 
     vf_parts = [scale_vf]
+
+    # Zoom: scale up by factor then crop back to target size (center crop)
+    # zoom=1.0 → no change, zoom=1.2 → 20% bigger, zoom=2.0 → 2x bigger
+    if req.zoom > 1.0:
+        zoomed_w = int(target_w * req.zoom) // 2 * 2  # keep even for h264
+        zoomed_h = int(target_h * req.zoom) // 2 * 2
+        vf_parts.append(
+            f"scale={zoomed_w}:{zoomed_h},"
+            f"crop={target_w}:{target_h}"
+        )
+
     if color_vf:
         vf_parts.append(color_vf)
     if extra_vf:
