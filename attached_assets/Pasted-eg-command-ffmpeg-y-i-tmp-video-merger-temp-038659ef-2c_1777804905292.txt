@@ -1,0 +1,14 @@
+eg command: ffmpeg -y -i /tmp/video-merger-temp/038659ef-2c91-4457-9667-767595a35111/video_000.mp4 -map 0:v:0 -map 0:a:0 -vf scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2,setsar=1,fps=30,fade=t=in:st=0:d=0.5,fade=t=out:st=7.5000:d=0.5 -af afade=t=in:st=0:d=0.5,afade=t=out:st=7.5000:d=0.5,dynaudnorm,apad=whole_dur=8.000000 -c:v libx264 -c:a aac -ar 44100 -ac 2 -preset fast -crf 23 /tmp/video-merger-temp/038659ef-2c91-4457-9667-767595a35111/norm_000.mp4
+2026-05-03 10:40:34,033 [INFO] video-merger: [038659ef-2c91-4457-9667-767595a35111] FFmpeg completed successfully.
+2026-05-03 10:40:34,219 [INFO] video-merger: [038659ef-2c91-4457-9667-767595a35111] clip 0: source=8.000s  normalized=8.000s  audio=True
+2026-05-03 10:40:34,219 [INFO] video-merger: [038659ef-2c91-4457-9667-767595a35111] FFmpeg command: ffmpeg -y -f concat -safe 0 -i /tmp/video-merger-temp/038659ef-2c91-4457-9667-767595a35111/concat_list.txt -fflags +genpts -c copy /tmp/video-merger-temp/038659ef-2c91-4457-9667-767595a35111/merged_raw.mp4
+2026-05-03 10:40:34,419 [INFO] video-merger: [038659ef-2c91-4457-9667-767595a35111] FFmpeg completed successfully.
+2026-05-03 10:40:34,753 [INFO] video-merger: [038659ef-2c91-4457-9667-767595a35111] merged duration: 8.023s (expected ~8.000s)
+2026-05-03 10:40:34,923 [INFO] video-merger: [038659ef-2c91-4457-9667-767595a35111] FFmpeg command: ffmpeg -y -i /tmp/video-merger-temp/038659ef-2c91-4457-9667-767595a35111/merged_raw.mp4 -i /tmp/video-merger-temp/038659ef-2c91-4457-9667-767595a35111/music.mp3 -filter_complex [0:a]volume=1.2000[orig];[1:a]aloop=loop=-1:size=2000000000,afade=t=in:st=0:d=1.0000,afade=t=out:st=6.0232:d=2.0000,volume=0.0800[music];[orig][music]amix=inputs=2:duration=first:normalize=0[aout] -map 0:v -map [aout] -c:v copy -c:a aac -ar 44100 -ac 2 -t 8.023220 /tmp/video-merger-output/038659ef-2c91-4457-9667-767595a35111.mp4
+2026-05-03 10:40:35,302 [INFO] video-merger: [038659ef-2c91-4457-9667-767595a35111] FFmpeg completed successfully.
+2026-05-03 10:40:35,303 [INFO] video-merger: [038659ef-2c91-4457-9667-767595a35111] Output ready: /tmp/video-merger-output/038659ef-2c91-4457-9667-767595a35111.mp4 (1.0 MB)
+2026-05-03 10:40:35,309 [INFO] video-merger: [038659ef-2c91-4457-9667-767595a35111] Cleaned up temp files.
+INFO:     82.29.153.39:41128 - "GET /status/038659ef-2c91-4457-9667-767595a35111 HTTP/1.1" 200 OK
+INFO:     82.29.153.39:41134 - "GET /download/038659ef-2c91-4457-9667-767595a35111 HTTP/1.1" 200 OK
+2026-05-03 10:40:35,482 [INFO] video-merger: [038659ef-2c91-4457-9667-767595a35111] Output file removed after download.
+root@vmi3086586:/opt/video-merger-tool/artifacts/video-merger#
