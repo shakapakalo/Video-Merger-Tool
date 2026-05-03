@@ -286,14 +286,14 @@ The API works in **3 steps**:
 
 #### Zoom Value Guide
 
-| `zoom` value | Actual zoom applied | Visible effect |
-|-------------|--------------------|--------------------|
-| `1.0` | 0% (no zoom) | Original size, no change |
-| `1.1` | 1% zoom in | Very subtle, barely visible |
-| `1.2` | 2% zoom in | Slight zoom in |
-| `1.5` | 5% zoom in | Noticeably zoomed |
-| `2.0` | 10% zoom in | Clearly zoomed in |
-| `3.0` | 20% zoom in | Strongly zoomed in |
+| `zoom` value | Scale applied | Visible effect |
+|-------------|--------------|----------------|
+| `1.0` | 1.0x (no zoom) | Original size, no change |
+| `1.1` | 1.1x — 10% bigger | Subtle zoom in, edges slightly cropped |
+| `1.2` | 1.2x — 20% bigger | Clearly zoomed in |
+| `1.3` | 1.3x — 30% bigger | Noticeably zoomed in |
+| `1.5` | 1.5x — 50% bigger | Strongly zoomed in |
+| `2.0` | 2.0x — 2× scale | Very tight zoom, half of frame cropped |
 
 > Zoom scales up all clips then center-crops back to the target resolution. No animation — same zoom level from start to end of every clip.
 

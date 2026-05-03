@@ -500,16 +500,15 @@ def _normalize_clip(
 
     vf_parts = [scale_vf]
 
-    # Zoom: scale up then crop back to target size (center crop)
+    # Zoom: scale up by zoom factor then center-crop back to target size
     # zoom=1.0 → no change
-    # zoom=1.1 → 1% bigger (scale by 1.01)
-    # zoom=1.2 → 2% bigger (scale by 1.02)
-    # zoom=2.0 → 10% bigger (scale by 1.10)
-    # formula: actual_scale = 1.0 + (zoom - 1.0) / 10
+    # zoom=1.1 → 10% bigger (1.1x scale, then crop edges)
+    # zoom=1.2 → 20% bigger
+    # zoom=1.3 → 30% bigger
+    # zoom=2.0 → 2x scale (crop half from each side)
     if req.zoom > 1.0:
-        actual_scale = 1.0 + (req.zoom - 1.0) / 10.0
-        zoomed_w = int(target_w * actual_scale) // 2 * 2  # keep even for h264
-        zoomed_h = int(target_h * actual_scale) // 2 * 2
+        zoomed_w = int(target_w * req.zoom) // 2 * 2  # keep even for h264
+        zoomed_h = int(target_h * req.zoom) // 2 * 2
         vf_parts.append(
             f"scale={zoomed_w}:{zoomed_h},"
             f"crop={target_w}:{target_h}"
