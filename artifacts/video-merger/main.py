@@ -102,6 +102,10 @@ class MergeRequest(BaseModel):
     sharpen: bool = False       # Apply sharpening filter
     blur: float = 0.0           # Gaussian blur radius (0.0 = off, 1-10 = strength)
 
+    # Zoom — scales each clip by this factor and crops to center
+    # 1.0 = no zoom (normal), 1.1 = 10% zoom in, 1.2 = 20% zoom in, 2.0 = 2x zoom
+    zoom: float = 1.0           # 1.0 to 3.0
+
     # Playback speed (applies to all clips)
     speed: float = 1.0          # 0.25 (slow-mo) to 4.0 (fast-forward)
 
@@ -192,6 +196,13 @@ class MergeRequest(BaseModel):
     def validate_saturation(cls, v: float) -> float:
         if not 0.0 <= v <= 3.0:
             raise ValueError("saturation must be between 0.0 and 3.0")
+        return round(v, 4)
+
+    @field_validator("zoom")
+    @classmethod
+    def validate_zoom(cls, v: float) -> float:
+        if not 1.0 <= v <= 3.0:
+            raise ValueError("zoom must be between 1.0 (no zoom) and 3.0 (3x zoom)")
         return round(v, 4)
 
     @field_validator("blur")
